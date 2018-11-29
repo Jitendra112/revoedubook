@@ -19,14 +19,14 @@ var myConnection  = require('express-myconnection')
  * Store database credentials in a separate config.js file
  * Load the file/module and its values
  */
-var config = require('./config')
-var dbOptions = {
-    host:      config.database.host,
-    user:       config.database.user,
-    password: config.database.password,
-    port:       config.database.port,
-    database: config.database.db
-}
+// var config = require('./config')
+// var dbOptions = {
+//     host:      config.database.host,
+//     user:       config.database.user,
+//     password: config.database.password,
+//     port:       config.database.port,
+//     database: config.database.db
+// }
 
 /**
  * 3 strategies can be used
@@ -34,7 +34,7 @@ var dbOptions = {
  * pool: Creates pool of connections. Connection is auto release when response ends.
  * request: Creates new connection per new request. Connection is auto close when response ends.
  */
-app.use(myConnection(mysql, dbOptions, 'pool'))
+//app.use(myConnection(mysql, dbOptions, 'pool'))
 
 
 /**
