@@ -260,18 +260,21 @@ app.get('/test_your_self',async function(req, res, next) {
 })
 
 app.get('/entrance_exam',async function(req, res, next) {
-      var eng
-      var engi
-      var query = 'SELECT exam_name from tbl_exams Where exam_type_id = 1';
-      engi = await database.query(query, [] );
-      console.log(engi);
-     var query = 'SELECT exam_type from tbl_exam_type';
-     eng = await database.query(query, [] );
-    //console.log(eng);
-     var data = {
-        eng: JSON.parse(eng),
-        engi: JSON.parse(engi)
-     }
+
+    var exams , exams_list = [];
+    var query =  'SELECT id ,exam_type from tbl_exam_type';
+    exams =  await database.query(query, [] );
+    exams = JSON.parse(exams)
+       for(i=0;i < exams.length ; i++){
+            var query1 = 'SELECT * from tbl_exams Where exam_type_id = '+exams[i].id;
+            // exams_list[exams[i].id]['exam_list'] = (JSON.parse(await database.query(query1, [] )));
+            exams_list[exams[i].id] = exams[i]; 
+            exams_list[exams[i].id].list = (JSON.parse(await database.query(query1, [] )));
+       }
+    var data  = {
+            exams_list : exams_list,
+            exams : exams
+        }
     res.render('site/entrance_exam', {
         title: 'Class List',
         data: data
