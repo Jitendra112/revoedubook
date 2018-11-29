@@ -2,6 +2,7 @@
 var express = require('express')
 var app = express()
 session = require('express-session');
+var url = require('url');
 const {database} = require('../db.js')
 app.get('/',async function(req, res, next) {
     var subjects ;
@@ -277,6 +278,30 @@ app.get('/entrance_exam',async function(req, res, next) {
         }
     res.render('site/entrance_exam', {
         title: 'Class List',
+        data: data
+    })
+})
+app.get('/exam_detail',async function(req, res, next) {
+    var q = url.parse(req.url, true).query;
+    var exams , exams_list = [];
+    var query =  'SELECT id ,exam_type from tbl_exam_type';
+    exams =  await database.query(query, [] );
+    exams = JSON.parse(exams)
+       for(i=0;i < exams.length ; i++){
+            var query1 = 'SELECT * from tbl_exams Where exam_type_id = '+exams[i].id;
+            exams_list[exams[i].id] = exams[i]; 
+            exams_list[exams[i].id].list = (JSON.parse(await database.query(query1, [] )));
+       }
+    var examquery = "SELECT tbl_exam_type.* ,tbl_exams.* FROM tbl_exam_type INNER JOIN tbl_exams on tbl_exams.exam_type_id = tbl_exam_type.id where tbl_exams.id = "+q.exam_id;
+        var exam_detail = await database.query(examquery, [] );
+        var data  = {
+            exams_list : exams_list,
+            exams : exams,
+            exam_detail : JSON.parse(exam_detail)[0]
+        }
+        console.log(data)
+    res.render('site/exam_detail', {
+        title: 'exam detail',
         data: data
     })
 })
