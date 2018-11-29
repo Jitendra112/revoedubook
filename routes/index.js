@@ -300,7 +300,7 @@ app.get('/exam_detail',async function(req, res, next) {
             exam_detail : JSON.parse(exam_detail)[0]
         }
         console.log(data)
-    res.render('site/exam_detail', {
+      res.render('site/exam_detail', {
         title: 'exam detail',
         data: data
     })
